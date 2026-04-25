@@ -1,20 +1,37 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Dashboard (must be logged in)
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+// Protected pages
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/roles', function () {
+        return 'Roles page coming soon';
+    })->name('roles.index');
+
+    Route::get('/projects', function () {
+        return 'Projects page coming soon';
+    })->name('projects.index');
+
+    Route::get('/project-roles', function () {
+        return 'Project Roles page coming soon';
+    })->name('projectroles.index');
+
+    Route::get('/applications', function () {
+        return 'Applications page coming soon';
+    })->name('applications.index');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';
