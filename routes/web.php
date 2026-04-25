@@ -32,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('applications.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    Route::resource('roles', \App\Http\Controllers\RoleController::class);
 });
 
 require __DIR__.'/auth.php';
