@@ -10,4 +10,9 @@ class Role extends Model
     'role_name',
     'description'
 ];
+
+public function projectRoles()
+    {
+        return $this->hasMany(ProjectRole::class);
+    }
 }
