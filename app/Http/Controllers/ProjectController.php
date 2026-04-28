@@ -11,8 +11,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = \App\Models\Project::with('user')->get();
-        return view('projects.index', compact('projects'));
+        $projectRoles = \App\Models\ProjectRole::with(['project', 'role'])->get();
+
+        return view('projectroles.index', compact('projectRoles'));
     }
 
     /**
