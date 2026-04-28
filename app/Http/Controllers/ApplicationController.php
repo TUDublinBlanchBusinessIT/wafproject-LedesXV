@@ -28,14 +28,22 @@ class ApplicationController extends Controller
             'project_role_id' => 'required|exists:project_roles,id',
         ]);
 
+        // Prevent duplicate applications
+        $exists = Application::where('user_id', auth()->id())
+            ->where('project_role_id', $request->project_role_id)
+            ->exists();
+
+        if ($exists) {
+            return redirect()->back()->with('error', 'You already applied for this role');
+        }
+
         Application::create([
             'user_id' => auth()->id(),
             'project_role_id' => $request->project_role_id,
             'status' => 'pending',
         ]);
 
-        return redirect()->route('applications.index')
-            ->with('success', 'Application submitted');
+        return redirect()->back()->with('success', 'Application submitted');
     }
 
     public function destroy($id)
