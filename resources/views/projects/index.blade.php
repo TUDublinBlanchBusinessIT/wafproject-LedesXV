@@ -5,7 +5,14 @@
 
     <div class="p-6">
 
-        <a href="{{ route('projects.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
+        @if(session('success'))
+            <div class="bg-green-200 p-2 mb-2">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <a href="{{ route('projects.create') }}"
+           class="bg-blue-500 text-white px-4 py-2 rounded">
             Add Project
         </a>
 
@@ -18,6 +25,7 @@
                     <th class="p-2">Actions</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach($projects as $project)
                     <tr>
@@ -27,12 +35,16 @@
 
                         <td class="p-2">
                             <a href="{{ route('projects.edit', $project->id) }}"
-                               class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</a>
+                               class="bg-yellow-500 text-white px-2 py-1 rounded">
+                                Edit
+                            </a>
 
                             <form action="{{ route('projects.destroy', $project->id) }}"
-                                  method="POST" style="display:inline;">
+                                  method="POST"
+                                  style="display:inline;">
                                 @csrf
                                 @method('DELETE')
+
                                 <button class="bg-red-500 text-white px-2 py-1 rounded">
                                     Delete
                                 </button>

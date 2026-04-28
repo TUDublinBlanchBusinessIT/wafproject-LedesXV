@@ -28,7 +28,16 @@ class ApplicationController extends Controller
             'project_role_id' => 'required|exists:project_roles,id',
         ]);
 
-        // Prevent duplicate applications
+        $projectRole = ProjectRole::findOrFail($request->project_role_id);
+
+        $acceptedCount = Application::where('project_role_id', $projectRole->id)
+            ->where('status', 'accepted')
+            ->count();
+
+        if ($acceptedCount >= $projectRole->slots) {
+            return redirect()->back()->with('error', 'No slots available for this role');
+        }
+
         $exists = Application::where('user_id', auth()->id())
             ->where('project_role_id', $request->project_role_id)
             ->exists();
