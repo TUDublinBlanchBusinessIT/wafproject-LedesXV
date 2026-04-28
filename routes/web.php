@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectRoleController;
+use App\Http\Controllers\ApplicationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,9 +23,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('projectroles', ProjectRoleController::class);
 
-    Route::get('/applications', function () {
-        return 'Applications page coming soon';
-    })->name('applications.index');
+    Route::resource('applications', ApplicationController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 });
