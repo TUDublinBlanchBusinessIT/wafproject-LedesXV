@@ -5,6 +5,18 @@
 
     <div class="p-6">
 
+        @if(session('success'))
+            <div class="bg-green-200 p-2 mb-2">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="bg-red-200 p-2 mb-2">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <a href="{{ route('applications.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
             New Application
         </a>
@@ -16,7 +28,7 @@
                     <th class="p-2">Project</th>
                     <th class="p-2">Role</th>
                     <th class="p-2">Status</th>
-                    <th class="p-2">Action</th>
+                    <th class="p-2">Actions</th>
                 </tr>
             </thead>
 
@@ -27,15 +39,36 @@
                         <td class="p-2">{{ $application->projectRole->project->title }}</td>
                         <td class="p-2">{{ $application->projectRole->role->role_name }}</td>
                         <td class="p-2">{{ ucfirst($application->status) }}</td>
+
                         <td class="p-2">
-                            <form method="POST" action="{{ route('applications.destroy', $application->id) }}">
+
+                            <!-- Accept -->
+                            <form method="POST" action="{{ route('applications.accept', $application->id) }}" style="display:inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button class="bg-green-500 text-white px-2 py-1 rounded">
+                                    Accept
+                                </button>
+                            </form>
+
+                            <!-- Reject -->
+                            <form method="POST" action="{{ route('applications.reject', $application->id) }}" style="display:inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button class="bg-yellow-500 text-white px-2 py-1 rounded">
+                                    Reject
+                                </button>
+                            </form>
+
+                            <!-- Delete -->
+                            <form method="POST" action="{{ route('applications.destroy', $application->id) }}" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-
                                 <button class="bg-red-500 text-white px-2 py-1 rounded">
                                     Delete
                                 </button>
                             </form>
+
                         </td>
                     </tr>
                 @endforeach

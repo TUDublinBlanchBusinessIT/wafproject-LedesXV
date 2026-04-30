@@ -63,4 +63,24 @@ class ApplicationController extends Controller
         return redirect()->route('applications.index')
             ->with('success', 'Application deleted');
     }
+
+        public function accept($id)
+    {
+        $application = Application::findOrFail($id);
+        $application->status = 'accepted';
+        $application->save();
+
+        return redirect()->route('applications.index')
+            ->with('success', 'Application accepted');
+    }
+
+    public function reject($id)
+    {
+        $application = Application::findOrFail($id);
+        $application->status = 'rejected';
+        $application->save();
+
+        return redirect()->route('applications.index')
+            ->with('success', 'Application rejected');
+}
 }
