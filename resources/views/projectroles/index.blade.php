@@ -29,20 +29,34 @@
 
             <tbody>
                 @foreach($projectRoles as $pr)
+                    @php
+                        $accepted = $pr->applications->where('status', 'accepted')->count();
+                        $remaining = $pr->slots - $accepted;
+                    @endphp
+
                     <tr>
                         <td class="p-2">{{ $pr->project->title }}</td>
                         <td class="p-2">{{ $pr->role->role_name }}</td>
-                        <td class="p-2">{{ $pr->slots }}</td>
 
+                        <!-- Slots display -->
                         <td class="p-2">
-                            <form method="POST" action="{{ route('applications.store') }}">
-                                @csrf
-                                <input type="hidden" name="project_role_id" value="{{ $pr->id }}">
+                            {{ $remaining }} / {{ $pr->slots }} left
+                        </td>
 
-                                <button class="bg-green-500 text-white px-2 py-1 rounded">
-                                    Apply
-                                </button>
-                            </form>
+                        <!-- Apply logic -->
+                        <td class="p-2">
+                            @if($remaining > 0)
+                                <form method="POST" action="{{ route('applications.store') }}">
+                                    @csrf
+                                    <input type="hidden" name="project_role_id" value="{{ $pr->id }}">
+
+                                    <button class="bg-green-500 text-white px-2 py-1 rounded">
+                                        Apply
+                                    </button>
+                                </form>
+                            @else
+                                <span class="text-red-500 font-semibold">Full</span>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

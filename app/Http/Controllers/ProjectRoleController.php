@@ -8,7 +8,8 @@ class ProjectRoleController extends Controller
 {
     public function index()
     {
-        $projectRoles = \App\Models\ProjectRole::with(['project', 'role'])->get();
+        $projectRoles = \App\Models\ProjectRole::with(['project', 'role', 'applications'])->get();
+
         return view('projectroles.index', compact('projectRoles'));
     }
 
@@ -34,6 +35,7 @@ class ProjectRoleController extends Controller
             'slots' => $request->slots
         ]);
 
-        return redirect()->route('projectroles.index');
+        return redirect()->route('projectroles.index')
+            ->with('success', 'Project role created');
     }
 }
