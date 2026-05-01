@@ -1,59 +1,72 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold">Projects</h2>
+        <h2>Projects</h2>
     </x-slot>
 
-    <div class="p-6">
+    <style>
+        .page-wrap { padding: 24px; background: #f3f4f6; min-height: 100vh; }
+        .card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); margin-top: 16px; }
+        .btn { color: white; font-weight: bold; padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; text-decoration: none; display: inline-block; margin-right: 6px; }
+        .btn-blue { background: #1d4ed8; }
+        .btn-yellow { background: #eab308; color: #111; }
+        .btn-red { background: #b91c1c; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #e5e7eb; color: #111827; text-align: left; padding: 12px; }
+        td { padding: 12px; border-top: 1px solid #d1d5db; color: #111827; }
+    </style>
+
+    <div class="page-wrap">
 
         @if(session('success'))
-            <div class="bg-green-200 p-2 mb-2">
+            <div style="background:#dcfce7; color:#166534; padding:12px; border-radius:8px; margin-bottom:12px;">
                 {{ session('success') }}
             </div>
         @endif
 
-        <a href="{{ route('projects.create') }}"
-           class="bg-blue-500 text-white px-4 py-2 rounded">
+        <a href="{{ route('projects.create') }}" class="btn btn-blue">
             Add Project
         </a>
 
-        <table class="mt-4 w-full border">
-            <thead>
-                <tr>
-                    <th class="p-2">Title</th>
-                    <th class="p-2">Description</th>
-                    <th class="p-2">Owner</th>
-                    <th class="p-2">Actions</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach($projects as $project)
+        <div class="card">
+            <table>
+                <thead>
                     <tr>
-                        <td class="p-2">{{ $project->title }}</td>
-                        <td class="p-2">{{ $project->description }}</td>
-                        <td class="p-2">{{ $project->user->name }}</td>
-
-                        <td class="p-2">
-                            <a href="{{ route('projects.edit', $project->id) }}"
-                               class="bg-yellow-500 text-white px-2 py-1 rounded">
-                                Edit
-                            </a>
-
-                            <form action="{{ route('projects.destroy', $project->id) }}"
-                                  method="POST"
-                                  style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-
-                                <button class="bg-red-500 text-white px-2 py-1 rounded">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Owner</th>
+                        <th>Actions</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    @foreach($projects as $project)
+                        <tr>
+                            <td>{{ $project->title }}</td>
+                            <td>{{ $project->description }}</td>
+                            <td>{{ $project->user->name }}</td>
+
+                            <td>
+                                <a href="{{ route('projects.edit', $project->id) }}"
+                                   class="btn btn-yellow">
+                                    Edit
+                                </a>
+
+                                <form action="{{ route('projects.destroy', $project->id) }}"
+                                      method="POST"
+                                      style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button class="btn btn-red">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
     </div>
 </x-app-layout>
