@@ -43,17 +43,26 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $project = Project::findOrFail($id);
+
+        if ($project->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         return view('projects.edit', compact('project'));
     }
 
     public function update(Request $request, $id)
     {
+        $project = Project::findOrFail($id);
+
+        if ($project->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $request->validate([
             'title' => 'required|max:255',
             'description' => 'nullable'
         ]);
-
-        $project = Project::findOrFail($id);
 
         $project->update([
             'title' => $request->title,
@@ -67,6 +76,11 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         $project = Project::findOrFail($id);
+
+        if ($project->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $project->delete();
 
         return redirect()->route('projects.index')

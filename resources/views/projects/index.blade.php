@@ -10,6 +10,7 @@
         .btn-blue { background: #1d4ed8; }
         .btn-yellow { background: #eab308; color: #111; }
         .btn-red { background: #b91c1c; }
+        .owner-only { color: #6b7280; font-weight: bold; }
         table { width: 100%; border-collapse: collapse; }
         th { background: #e5e7eb; color: #111827; text-align: left; padding: 12px; }
         td { padding: 12px; border-top: 1px solid #d1d5db; color: #111827; }
@@ -46,21 +47,27 @@
                             <td>{{ $project->user->name }}</td>
 
                             <td>
-                                <a href="{{ route('projects.edit', $project->id) }}"
-                                   class="btn btn-yellow">
-                                    Edit
-                                </a>
+                                @if(auth()->id() === $project->user_id)
 
-                                <form action="{{ route('projects.destroy', $project->id) }}"
-                                      method="POST"
-                                      style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
+                                    <a href="{{ route('projects.edit', $project->id) }}"
+                                       class="btn btn-yellow">
+                                        Edit
+                                    </a>
 
-                                    <button class="btn btn-red">
-                                        Delete
-                                    </button>
-                                </form>
+                                    <form action="{{ route('projects.destroy', $project->id) }}"
+                                          method="POST"
+                                          style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button class="btn btn-red">
+                                            Delete
+                                        </button>
+                                    </form>
+
+                                @else
+                                    <span class="owner-only">Owner only</span>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

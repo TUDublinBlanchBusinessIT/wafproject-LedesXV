@@ -68,23 +68,29 @@
                             </td>
 
                             <td>
-                                <form method="POST" action="{{ route('applications.accept', $application->id) }}" style="display:inline;">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button class="btn btn-green">Accept</button>
-                                </form>
+                                @if(auth()->id() === $application->projectRole->project->user_id)
 
-                                <form method="POST" action="{{ route('applications.reject', $application->id) }}" style="display:inline;">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button class="btn btn-orange">Reject</button>
-                                </form>
+                                    <form method="POST" action="{{ route('applications.accept', $application->id) }}" style="display:inline;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button class="btn btn-green">Accept</button>
+                                    </form>
 
-                                <form method="POST" action="{{ route('applications.destroy', $application->id) }}" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-red">Delete</button>
-                                </form>
+                                    <form method="POST" action="{{ route('applications.reject', $application->id) }}" style="display:inline;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button class="btn btn-orange">Reject</button>
+                                    </form>
+
+                                    <form method="POST" action="{{ route('applications.destroy', $application->id) }}" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-red">Delete</button>
+                                    </form>
+
+                                @else
+                                    <span style="color:#6b7280; font-weight:bold;">Owner only</span>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

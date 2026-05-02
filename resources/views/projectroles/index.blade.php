@@ -7,11 +7,13 @@
         .page-wrap { padding: 24px; background: #f3f4f6; min-height: 100vh; }
         .card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); margin-top: 16px; }
 
-        .btn { color: white; font-weight: bold; padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn { color: white; font-weight: bold; padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; text-decoration: none; display: inline-block; margin-right: 6px; }
         .btn-blue { background: #1d4ed8; }
         .btn-green { background: #15803d; }
         .btn-red { background: #b91c1c; }
         .btn-yellow { background: #eab308; color: #111827; }
+
+        .owner-only { color: #6b7280; font-weight: bold; }
 
         table { width: 100%; border-collapse: collapse; }
         th { background: #e5e7eb; color: #111827; text-align: left; padding: 12px; }
@@ -62,7 +64,6 @@
                             <td>{{ $pr->project->title }}</td>
                             <td>{{ $pr->role->role_name }}</td>
 
-                            <!-- Slots -->
                             <td>
                                 @if($remaining > 0)
                                     <span class="status-open">
@@ -75,7 +76,6 @@
                                 @endif
                             </td>
 
-                            <!-- Apply -->
                             <td>
                                 @if($remaining > 0)
                                     <form method="POST" action="{{ route('applications.store') }}">
@@ -91,27 +91,28 @@
                                 @endif
                             </td>
 
-                            <!-- Actions -->
                             <td>
+                                @if(auth()->id() === $pr->project->user_id)
 
-                                <!-- Edit -->
-                                <a href="{{ route('projectroles.edit', $pr->id) }}"
-                                   class="btn btn-yellow">
-                                    Edit
-                                </a>
+                                    <a href="{{ route('projectroles.edit', $pr->id) }}"
+                                       class="btn btn-yellow">
+                                        Edit
+                                    </a>
 
-                                <!-- Delete -->
-                                <form action="{{ route('projectroles.destroy', $pr->id) }}"
-                                      method="POST"
-                                      style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
+                                    <form action="{{ route('projectroles.destroy', $pr->id) }}"
+                                          method="POST"
+                                          style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
 
-                                    <button class="btn btn-red">
-                                        Delete
-                                    </button>
-                                </form>
+                                        <button class="btn btn-red">
+                                            Delete
+                                        </button>
+                                    </form>
 
+                                @else
+                                    <span class="owner-only">Owner only</span>
+                                @endif
                             </td>
 
                         </tr>

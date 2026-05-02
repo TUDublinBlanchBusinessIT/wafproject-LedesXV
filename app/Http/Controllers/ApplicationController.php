@@ -57,30 +57,43 @@ class ApplicationController extends Controller
 
     public function destroy($id)
     {
-        $application = Application::findOrFail($id);
+        $application = Application::with('projectRole.project')->findOrFail($id);
+
+        if ($application->projectRole->project->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $application->delete();
 
         return redirect()->route('applications.index')
             ->with('success', 'Application deleted');
     }
 
-        public function accept($id)
+    public function accept($id)
     {
-        $application = Application::findOrFail($id);
+        $application = Application::with('projectRole.project')->findOrFail($id);
+
+        if ($application->projectRole->project->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $application->status = 'accepted';
         $application->save();
 
-        return redirect()->route('applications.index')
-            ->with('success', 'Application accepted');
+        return redirect()->back()->with('success', 'Application accepted');
     }
 
     public function reject($id)
     {
-        $application = Application::findOrFail($id);
+        $application = Application::with('projectRole.project')->findOrFail($id);
+
+        if ($application->projectRole->project->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $application->status = 'rejected';
         $application->save();
 
-        return redirect()->route('applications.index')
-            ->with('success', 'Application rejected');
-}
+        return redirect()->back()->with('success', 'Application rejected');
+    }
 }
