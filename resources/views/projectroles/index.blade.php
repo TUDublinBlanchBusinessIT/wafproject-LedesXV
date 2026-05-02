@@ -6,13 +6,17 @@
     <style>
         .page-wrap { padding: 24px; background: #f3f4f6; min-height: 100vh; }
         .card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); margin-top: 16px; }
+
         .btn { color: white; font-weight: bold; padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; text-decoration: none; display: inline-block; }
         .btn-blue { background: #1d4ed8; }
         .btn-green { background: #15803d; }
         .btn-red { background: #b91c1c; }
+        .btn-yellow { background: #eab308; color: #111827; }
+
         table { width: 100%; border-collapse: collapse; }
         th { background: #e5e7eb; color: #111827; text-align: left; padding: 12px; }
         td { padding: 12px; border-top: 1px solid #d1d5db; color: #111827; }
+
         .status-full { background: #fecaca; color: #991b1b; padding: 5px 10px; border-radius: 999px; font-weight: bold; }
         .status-open { background: #bbf7d0; color: #166534; padding: 5px 10px; border-radius: 999px; font-weight: bold; }
     </style>
@@ -43,6 +47,7 @@
                         <th>Role</th>
                         <th>Slots</th>
                         <th>Apply</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -57,6 +62,7 @@
                             <td>{{ $pr->project->title }}</td>
                             <td>{{ $pr->role->role_name }}</td>
 
+                            <!-- Slots -->
                             <td>
                                 @if($remaining > 0)
                                     <span class="status-open">
@@ -69,6 +75,7 @@
                                 @endif
                             </td>
 
+                            <!-- Apply -->
                             <td>
                                 @if($remaining > 0)
                                     <form method="POST" action="{{ route('applications.store') }}">
@@ -83,6 +90,30 @@
                                     <span class="status-full">Closed</span>
                                 @endif
                             </td>
+
+                            <!-- Actions -->
+                            <td>
+
+                                <!-- Edit -->
+                                <a href="{{ route('projectroles.edit', $pr->id) }}"
+                                   class="btn btn-yellow">
+                                    Edit
+                                </a>
+
+                                <!-- Delete -->
+                                <form action="{{ route('projectroles.destroy', $pr->id) }}"
+                                      method="POST"
+                                      style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button class="btn btn-red">
+                                        Delete
+                                    </button>
+                                </form>
+
+                            </td>
+
                         </tr>
                     @endforeach
                 </tbody>
