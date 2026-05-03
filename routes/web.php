@@ -25,10 +25,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('applications', ApplicationController::class);
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-
     Route::patch('/applications/{application}/accept', [ApplicationController::class, 'accept'])->name('applications.accept');
     Route::patch('/applications/{application}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';
